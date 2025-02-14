@@ -1,21 +1,20 @@
-name: nih2mne-tests
-on: [push]
 jobs:
-  pytest:
-    runs-on: ubuntu-latest
+  example-1:
+    name: Ex1 
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ["ubuntu-latest"]
+        python-version: ["3.7", "3.11"]
     steps:
-      - uses: actions/checkout@v4
       - uses: conda-incubator/setup-miniconda@v3
         with:
-          python-version: 3.12
-          mamba-version: "*"
-          channels: conda-forge,defaults
-          channel-priority: true
-      - name: Install dependencies and pull data
-          shell: bash -el {0}
-          run: conda create --channel=conda-forge --strict-channel-priority --name=mne mne
-
-      
-          #- name: Pytest
-          #shell: bash -el {0}
-          #run: make test
+          auto-update-conda: true
+          python-version: ${{ matrix.python-version }}
+      - name: Conda info
+        shell: bash -el {0}
+        run: conda info
+      - name: Conda list
+        shell: bash -el {0}
+        run: conda list
